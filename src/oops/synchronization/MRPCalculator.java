@@ -11,7 +11,8 @@ public class MRPCalculator implements Callable<Integer> {
     }
 
     @Override
-    public Integer call() {
+    public Integer call() throws InterruptedException {
+        Thread.sleep(5000);
         System.out.println("MRP for Product ID : " + productId + "Thread : " + Thread.currentThread().getName());
         return 100;
     }

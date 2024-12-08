@@ -1,5 +1,6 @@
 package oops.synchronization;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.*;
 
 public class Main {
@@ -24,17 +25,27 @@ public class Main {
         MRPCalculator productMRP = new MRPCalculator(11);
         DiscountCalculator productDiscountCalc = new DiscountCalculator(11);
         ExecutorService e1 = Executors.newFixedThreadPool(2);
+        // Submit will add it to ExecutorQueue
         Future<Integer> futureMrp = e1.submit(productMRP);
         Future<Double> futureDiscount = e1.submit(productDiscountCalc);
 
+        System.out.println("Before call from thread : " + Thread.currentThread().getName() + ", Time : " + LocalDateTime.now());
 
         Integer mrp = futureMrp.get();
-        System.out.println("MRP Thread : " + Thread.currentThread().getName() + " " + mrp);
+        System.out.println("After MRP Thread : " + Thread.currentThread().getName() + " " + mrp + ", Time : " + LocalDateTime.now());
         Double discount = futureDiscount.get();
-        System.out.println("Discount Thread : " + Thread.currentThread().getName() + " "+  discount);
+        System.out.println("After Discount Thread : " + Thread.currentThread().getName() + " " + discount + ", Time : " + LocalDateTime.now());
         double finalPrice = mrp - (mrp * discount / 100);
 
         System.out.println("Final price: " + finalPrice + " " + Thread.currentThread().getName());
+
+        // ----  Discount calculation will be done first -----
+//        Discount for Product ID : 11Thread : pool-1-thread-2
+//        Before call from thread : main, Time : 2024-12-08T20:08:24.426796800
+//        MRP for Product ID : 11Thread : pool-1-thread-1
+//        After MRP Thread : main 100, Time : 2024-12-08T20:08:29.422809100
+//        After Discount Thread : main 10.0, Time : 2024-12-08T20:08:29.436819200
+//        Final price: 90.0 main
 
 
     }
