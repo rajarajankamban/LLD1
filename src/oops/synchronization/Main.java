@@ -22,22 +22,22 @@ public class Main {
 //
 //
         // Callable example
-        MRPCalculator productMRP = new MRPCalculator(11);
-        DiscountCalculator productDiscountCalc = new DiscountCalculator(11);
-        ExecutorService e1 = Executors.newFixedThreadPool(2);
-        // Submit will add it to ExecutorQueue
-        Future<Integer> futureMrp = e1.submit(productMRP);
-        Future<Double> futureDiscount = e1.submit(productDiscountCalc);
-
-        System.out.println("Before call from thread : " + Thread.currentThread().getName() + ", Time : " + LocalDateTime.now());
-
-        Integer mrp = futureMrp.get();
-        System.out.println("After MRP Thread : " + Thread.currentThread().getName() + " " + mrp + ", Time : " + LocalDateTime.now());
-        Double discount = futureDiscount.get();
-        System.out.println("After Discount Thread : " + Thread.currentThread().getName() + " " + discount + ", Time : " + LocalDateTime.now());
-        double finalPrice = mrp - (mrp * discount / 100);
-
-        System.out.println("Final price: " + finalPrice + " " + Thread.currentThread().getName());
+//        MRPCalculator productMRP = new MRPCalculator(11);
+//        DiscountCalculator productDiscountCalc = new DiscountCalculator(11);
+//        ExecutorService e1 = Executors.newFixedThreadPool(2);
+//        // Submit will add it to ExecutorQueue
+//        Future<Integer> futureMrp = e1.submit(productMRP);
+//        Future<Double> futureDiscount = e1.submit(productDiscountCalc);
+//
+//        System.out.println("Before call from thread : " + Thread.currentThread().getName() + ", Time : " + LocalDateTime.now());
+//
+//        Integer mrp = futureMrp.get();
+//        System.out.println("After MRP Thread : " + Thread.currentThread().getName() + " " + mrp + ", Time : " + LocalDateTime.now());
+//        Double discount = futureDiscount.get();
+//        System.out.println("After Discount Thread : " + Thread.currentThread().getName() + " " + discount + ", Time : " + LocalDateTime.now());
+//        double finalPrice = mrp - (mrp * discount / 100);
+//
+//        System.out.println("Final price: " + finalPrice + " " + Thread.currentThread().getName());
 
         // ----  Discount calculation will be done first -----
 //        Discount for Product ID : 11Thread : pool-1-thread-2
@@ -48,5 +48,20 @@ public class Main {
 //        Final price: 90.0 main
 
 
+        // Synchronization Example
+
+        Counter c = new Counter(0);
+        Adder adder = new Adder(c);
+        Substractor substractor = new Substractor(c);
+
+        Thread addThread = new Thread(adder);
+        Thread substractorThread = new Thread(substractor);
+        addThread.start();
+        substractorThread.start();
+        // Stops the main thread until the current thread is completed and finished.
+        addThread.join();
+        substractorThread.join();
+
+        System.out.println("Final counter " + c.getCount());
     }
 }
