@@ -2,6 +2,7 @@ package oops.synchronization;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Main {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
@@ -51,8 +52,9 @@ public class Main {
         // Synchronization Example
 
         Counter c = new Counter(0);
-        Adder adder = new Adder(c);
-        Substractor substractor = new Substractor(c);
+        ReentrantLock mutex  = new ReentrantLock();
+        Adder adder = new Adder(c,mutex);
+        Substractor substractor = new Substractor(c,mutex);
 
         Thread addThread = new Thread(adder);
         Thread substractorThread = new Thread(substractor);
