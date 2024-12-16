@@ -2,11 +2,17 @@ package oops.semaphores;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class Main {
 
     public static void main(String[] args) {
-        Queue<IPhone> store = new LinkedList<>();
+        // ConcurrentLinkedDeque - It will enable multi thread enabled queue
+        // It will allow multi thread to add/update/delete on the queue at the same time
+
+        // Both LinkedDeque and ConcurrentLinkedDeque will face synchronization issue
+        // With LinkedDeque - Error - only producer able to add always - It didn't allow concurrent modification
+        Queue<IPhone> store = new ConcurrentLinkedDeque<>();
         Producer p1 = new Producer(store, "P1");
         Producer p2 = new Producer(store, "P2");
         Producer p3 = new Producer(store, "P3");
@@ -43,6 +49,7 @@ public class Main {
         tp4.start();
         tc5.start();
         tp5.start();
+
 
 
 
