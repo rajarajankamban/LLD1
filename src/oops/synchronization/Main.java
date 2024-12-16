@@ -52,9 +52,9 @@ public class Main {
         // Synchronization Example
 
         Counter c = new Counter(0);
-        ReentrantLock mutex  = new ReentrantLock();
-        Adder adder = new Adder(c,mutex);
-        Substractor substractor = new Substractor(c,mutex);
+//        ReentrantLock mutex  = new ReentrantLock();
+        Adder adder = new Adder(c);
+        Substractor substractor = new Substractor(c);
 
         Thread addThread = new Thread(adder);
         Thread substractorThread = new Thread(substractor);
