@@ -18,7 +18,7 @@ public class Substractor implements Runnable {
     @Override
     public void run() {
         for (int i = 0; i < 1000; i++) {
-            synchronized (Counter.class) {
+            synchronized (Counter.class) { // we can pass any class here. But the same reference has to be mention in other places where we need lock
                 count.setCount(count.getCount() - 1);
             }
 
