@@ -1,26 +1,37 @@
 package oops.semaphores;
 
 import java.util.Queue;
+import java.util.concurrent.Semaphore;
 
 public class Producer implements Runnable {
     private Queue<IPhone> store;
     private String name;
+    private Semaphore semaProducer;
+    private Semaphore semaConsumer;
 
-    public Producer(Queue<IPhone> store, String name) {
+    public Producer(Queue<IPhone> store, String name, Semaphore semaProducer, Semaphore semaConsumer) {
         this.store = store;
         this.name = name;
+        this.semaConsumer = semaConsumer;
+        this.semaProducer = semaProducer;
     }
 
 
     @Override
     public void run() {
         while (true) {
-            synchronized (Producer.class) {
+            try {
+                semaProducer.acquire();
+
                 if (store.size() <= 5) {
                     System.out.println("Current size : " + store.size() + ", adding a Iphone by producer : " + name);
                     store.add(new IPhone());
                 }
+                semaConsumer.release();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
+
         }
     }
 }
